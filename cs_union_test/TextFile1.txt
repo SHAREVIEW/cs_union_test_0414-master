@@ -1,0 +1,36 @@
+﻿
+
+//c#联合体参考：
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
+ 
+namespace ConsoleApplication
+{
+    [StructLayout(LayoutKind.Explicit, Size = 4)]
+    public struct Union
+    {
+        [FieldOffset(0)]
+        public Byte b0;
+        [FieldOffset(1)]
+        public Byte b1;
+        [FieldOffset(2)]
+        public Byte b2;
+        [FieldOffset(3)]
+        public Byte b3;
+        [FieldOffset(0)]
+        public Int32 i;
+        [FieldOffset(0)]
+        public Single f;
+    }
+}
+
+
+
+
+  Union u = new Union();   
+   u.i = 1024;
+   Console.WriteLine(u.b1 == 4);

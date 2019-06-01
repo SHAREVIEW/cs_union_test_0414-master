@@ -1,0 +1,144 @@
+﻿
+
+前一段时间写代码时经常遇到获取路径问题,总是感觉有点乱,于是就总结了下,大家若有需要可以参考
+
+1.    在.Net中web开发时
+
+(1)  ~/在runat=server的控件中会自动被解析为Request.ApplicationPath的值,是当前应用程序的目录 如
+
+
+
+~/userCommunity/index.aspx则对应为/HENU.RCenter.Internal/UserCommunity
+
+（2） ./表示当前目录
+
+（3）../表示上一层目录 如UserCommunity文件夹下的文件中可以以：../module/来访问module中的文件
+
+2 获取当前请求页面的路径：Request.FilePath
+
+3 获取项目下的文件路径：
+
+string path=AppDomain. CurrentDomain .SetUpInformation.ApplicationBase+文件夹+文件
+
+如获取项目下的temp文件夹下文件的路径
+
+
+
+可以用：string savePath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "temp" + @"\" + filename
+
+4 Server.MapPath用法：
+
+
+
+若在项目下Content文件夹下的UserInfoManager.aspx代码中写如下路径
+
+this.tempPath = Server.MapPath("UploadResourceImage\\");
+
+则返回 D:\wxm\练习\Content\UploadResourceImage
+
+ 
+
+其它
+ 
+
+一、获取当前文件的路径  
+
+1.  System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName  获取模块的完整路径，包括文件名。
+
+2.  System.Environment.CurrentDirectory    获取和设置当前目录(该进程从中启动的目录)的完全限定目录。   
+
+3.  System.IO.Directory.GetCurrentDirectory()    获取应用程序的当前工作目录。这个不一定是程序从中启动的目录啊，有可能程序放在C:\www里,这个函数有可能返回C:\Documents and Settings\ZYB\,或者C:\Program Files\Adobe\,有时不一定返回什么东东，这是任何应用程序最后一次操作过的目录，比如你用Word打开了E:\doc\my.doc这个文件，此时执行这个方法就返回了E:\doc了。   
+
+4. System.AppDomain.CurrentDomain.BaseDirectory    获取程序的基目录。
+
+5. System.AppDomain.CurrentDomain.SetupInformation.ApplicationBase    获取和设置包括该应用程序的目录的名称。   
+
+6. System.Windows.Forms.Application.StartupPath    获取启动了应用程序的可执行文件的路径。效果和2、5一样。只是5返回的字符串后面多了一个"\"而已   
+
+7. System.Windows.Forms.Application.ExecutablePath    获取启动了应用程序的可执行文件的路径及文件名，效果和1一样。   
+
+二、操作环境变量    利用System.Environment.GetEnvironmentVariable()方法可以很方便地取得系统环境变量，如：    System.Environment.GetEnvironmentVariable("windir")就可以取得windows系统目录的路径。   
+
+以下是一些常用的环境变量取值：   
+
+System.Environment.GetEnvironmentVariable("windir");
+
+System.Environment.GetEnvironmentVariable("INCLUDE");   
+
+System.Environment.GetEnvironmentVariable("TMP");   
+
+System.Environment.GetEnvironmentVariable("TEMP");   
+
+System.Environment.GetEnvironmentVariable("Path");   
+
+最后贴出我进行上面操作获得的变量值，事先说明，本人是编写了一个WinForm程序，项目文件存放于D:\Visual Studio Projects\MyApplication\LifeAssistant，编译后的文件位于D:\Visual Studio Projects\MyApplication\LifeAssistant\bin\Debug，最后的结果如下：
+
+1、System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName=D:\Visual Studio Projects\MyApplication\LifeAssistant\bin\Debug\LifeAssistant.exe   
+
+2、System.Environment.CurrentDirectory=D:\Visual Studio Projects\MyApplication\LifeAssistant\bin\Debug   
+
+3、System.IO.Directory.GetCurrentDirectory()=D:\Visual Studio Projects\MyApplication\LifeAssistant\bin\Debug   
+
+1 asp.net webform用"Request.PhysicalApplicationPath获取站点所在虚拟目录的物理路径，最后包含"\"；   
+
+2.c# winform用   
+
+A："Application.StartupPath":获取当前应用程序所在目录的路径，最后不包含"\"；   
+
+B："Application.ExecutablePath ":获取当前应用程序文件的路径，包含文件的名称；   
+
+C："AppDomain.CurrentDomain.BaseDirectory":获取当前应用程序所在目录的路径，最后包含"\"；   
+
+D："System.Threading.Thread.GetDomain().BaseDirectory":获取当前应用程序所在目录的路径，最后包含"\"；   
+
+E："Environment.CurrentDirectory":获取当前应用程序的路径，最后不包含"\"；   
+
+F："System.IO.Directory.GetCurrentDirectory":获取当前应用程序的路径，最后不包含"\"；    3.c# windows service用"AppDomain.CurrentDomain.BaseDirectory"或"System.Threading.Thread.GetDomain().BaseDirectory"；   用"Environment.CurrentDirectory"和"System.IO.Directory.GetCurrentDirectory"将得到" system32"目录的路径；   
+
+如果要使用"Application.StartupPath"或"Application.ExecutablePath "，需要手动添加对"System.Windows.Forms.dll "的引用，并在程序开头用"using System.Windows.Forms"声明该引用；   
+
+4.在卸载程序获取系统安装的目录：   
+
+System.Reflection.Assembly curPath = System.Reflection.Assembly.GetExecutingAssembly();   
+
+string path=curPath.Location;//得到安装程序类SetupLibrary文件的路径，获取这个文件路径所在的目录即得到安装程序的目录;   
+
+4、System.AppDomain.CurrentDomain.BaseDirectory=D:\Visual Studio Projects\MyApplication\LifeAssistant\bin\Debug\   
+
+5、System.AppDomain.CurrentDomain.SetupInformation.ApplicationBase=D:\Visual Studio Projects\MyApplication\LifeAssistant\bin\Debug\   
+
+6、System.Windows.Forms.Application.StartupPath=D:\Visual Studio Projects\MyApplication\LifeAssistant\bin\Debug   
+
+7、System.Windows.Forms.Application.ExecutablePath=D:\Visual Studio Projects\MyApplication\LifeAssistant\bin\Debug\LifeAssistant.exe    System.Environment.GetEnvironmentVariable("windir")=C:\WINDOWS   
+
+System.Environment.GetEnvironmentVariable("INCLUDE")=C:\Program Files\Microsoft Visual Studio .NET 2003\SDK\v1.1\include\   
+
+System.Environment.GetEnvironmentVariable("TMP")=C:\DOCUME~1\zhoufoxcn\LOCALS~1\Temp   
+
+System.Environment.GetEnvironmentVariable("TEMP")=C:\DOCUME~1\zhoufoxcn\LOCALS~1\Temp   
+
+System.Environment.GetEnvironmentVariable("Path")=C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\jdk1.5.0\bin;C:\MySQLServer5.0\bin;C:\Program Files\Symantec\pcAnywhere\;C:\Program Files\Microsoft SQL Server\80\Tools\BINN   
+
+C# 相对路径 系统路径   
+
+//获取启动了应用程序的可执行文件的路径，不包括可执行文件的名称。 
+
+string  str5=Application.StartupPath;    //可获得当前执行的exe的文件名。 
+
+string  str1  =Process.GetCurrentProcess().MainModule.FileName;    //获取和设置当前目录（即该进程从中启动的目录）的完全限定路径。备注  按照定义，如果该进程在本地或网络驱动器的根目录中启动，则此属性的值为驱动器名称后跟一个尾部反斜杠（如"C:\"）。如果该进程在子目录中启动，则此属性的值为不带尾部反斜杠的驱动器和子目录路径（如"C:\mySubDirectory"）。
+
+  string  str2=Environment.CurrentDirectory;    //获取应用程序的当前工作目录。
+
+  string  str3=Directory.GetCurrentDirectory();    //获取基目录，它由程序集冲突解决程序用来探测程序集。  string  str4=AppDomain.CurrentDomain.BaseDirectory;    //获取启动了应用程序的可执行文件的路径，不包括可执行文件的名称。  string  str5=Application.StartupPath;    //获取启动了应用程序的可执行文件的路径，包括可执行文件的名称。 
+
+string  str6=Application.ExecutablePath;    //获取或设置包含该应用程序的目录的名称。    string  str7=AppDomain.CurrentDomain.SetupInformation.ApplicationBase;    //例子    Application.StartupPath;    //可以得到F:\learning\c#Training\win\win\bin\Debug    //注意自己补两个\    Application.StartupPath+"\\3.jpg";
+
+在c#中，相对路径是用"."和".."表示，   "."代表当前目录，    ".."代表上一级录。    例如 假设我用vs2005在D:\My Documents\Visual Studio 2005\Projects目录里创建了一个名叫controls的项目，即在Projects文件夹里有一个controls文件夹，controls文件夹里有三个文件：controls.sln  controls文件夹  GulfOfStLawrence文件夹。    D:\My Documents\Visual Studio 2005\Projects\Controls\Controls\bin\Debug是这个简单项目能够运行的可执行文件Controls.exe    现在我想要 D:\My Documents\Visual Studio 2005\Projects\Controls\GulfOfStLawrence文件夹下的Gulf_of_St._Lawrence.mxd（arcgis desktop）工程文件路径。    那么相对路径应该就是"..\..\..\GulfOfStLawrence\Gulf_of_St._Lawrence.mxd"    即string filename = @"..\..\..\GulfOfStLawrence\Gulf_of_St._Lawrence.mxd";   
+
+心得：
+
+1.用相对路径能增加项目的可移植性。使一个工程在移植过程中变得简单，节省了大量布置与工程相关的文件的时间。（如果设置的是绝对路径）。 
+
+2.使用相对路径也使程序代码变得简单 
+
+3. 但有一点必须注意：（只能在同一个驱动器里（如：都在D:里）使用相对路径）。
