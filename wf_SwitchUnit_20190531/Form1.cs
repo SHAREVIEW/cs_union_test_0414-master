@@ -12,8 +12,7 @@ using wf_SwitchUnit_20190531.About;
 
 namespace wf_SwitchUnit_20190531
 {
-
-    public partial class Form1 : Form
+        public partial class Form1 : Form
     {
         public Form1()
         {
